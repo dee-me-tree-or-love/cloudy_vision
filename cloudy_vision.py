@@ -9,13 +9,10 @@ import pprint
 import shutil
 import time
 import re
-import vendors.google
-import vendors.microsoft
-import vendors.clarifai_
-import vendors.ibm
-import vendors.cloudsight_
-import vendors.rekognition
-
+import vendors.labels.microsoft
+import vendors.text.microsoft
+import vendors.labels.rekognition
+import vendors.text.rekognition
 
 SETTINGS = None
 def settings(name):
@@ -33,12 +30,13 @@ def settings(name):
             'static_dir' : 'static',
             'output_image_height' : 200,
             'vendors' : {
+                # TODO: get an API KEY for google
                 # 'google' : vendors.google,
-                'msft' : vendors.microsoft,
+                'msft' : vendors.text.microsoft,
                 # 'clarifai' : vendors.clarifai_,
                 # 'ibm' : vendors.ibm,
                 # 'cloudsight' : vendors.cloudsight_,
-                'rekognition' : vendors.rekognition,
+                'rekognition' : vendors.text.rekognition,
             },
             'resize': False,
             'statistics': [
@@ -214,7 +212,7 @@ def process_all_images():
             # Sort tags if found
             if 'tags' in standardized_result:
                 standardized_result['tags'].sort(key=lambda tup: tup[1], reverse=True)
-
+            # print(standardized_result)
             # If expected tags are provided, calculate accuracy
             tags_count = 0
             matching_tags = []
@@ -240,6 +238,8 @@ def process_all_images():
                 'matching_confidence' : matching_confidence,
             })
 
+            print(image_result)
+
     # Compute global statistics for each vendor
     vendor_stats = vendor_statistics(image_results)
 
@@ -259,6 +259,7 @@ def process_all_images():
     output_html_filepath = os.path.join(settings('output_dir'), 'output.html')
     with open(output_html_filepath, 'w') as output_html_file:
         output_html_file.write(output_html)
+
 
 
 if __name__ == "__main__":

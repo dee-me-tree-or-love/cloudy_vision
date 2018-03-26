@@ -79,15 +79,15 @@
           {% for feature_name, feature_results in vendor['standardized_result'].items() %}
           <tr>
               <td class="result_name">
-                  {{ vendor['vendor_name'] }}_{{ feature_name }}
+                  {{ vendor['vendor_name'] }}_{{ feature_name }}_({{ feature_results|length }})
               </td>
               <td class="result_values">
                   {% for result in feature_results %}
                   {% set score = result[1] %}
-                  <span class="result" style="opacity: {{ score }}">
+                  <span class="result" style="opacity: {{ score if score>0 else 50.0 }}">
                       {{ result[0] }}
                       {% if score is not none %}
-                      <span class="score">({{ ("%.2f" % score).lstrip('0') }})</span>
+                      <span class="score">({{ ("%.2f" % score).lstrip('0') if score else 'n/a'}})</span>
                       {% endif %}
                       {% if not loop.last %}
                       ,
