@@ -1,5 +1,6 @@
 from jinja2 import FileSystemLoader, Environment
 from shutil import copyfile
+import posixpath
 import datetime
 import json
 import numpy as np
@@ -32,14 +33,14 @@ def settings(name):
             'static_dir' : 'static',
             'output_image_height' : 200,
             'vendors' : {
-                'google' : vendors.google,
+                # 'google' : vendors.google,
                 'msft' : vendors.microsoft,
-                'clarifai' : vendors.clarifai_,
-                'ibm' : vendors.ibm,
-                'cloudsight' : vendors.cloudsight_,
+                # 'clarifai' : vendors.clarifai_,
+                # 'ibm' : vendors.ibm,
+                # 'cloudsight' : vendors.cloudsight_,
                 'rekognition' : vendors.rekognition,
             },
-            'resize': True,
+            'resize': False,
             'statistics': [
                 'response_time',
                 'tags_count',
@@ -176,7 +177,7 @@ def process_all_images():
                 copyfile(filepath, output_image_filepath)
 
         # Walk through all vendor APIs to call.
-        for vendor_name, vendor_module in sorted(settings('vendors').iteritems(), reverse=True):
+        for vendor_name, vendor_module in sorted(settings('vendors').items(), reverse=True):
 
             # Figure out filename to store and retrive cached JSON results.
             output_json_filename = filename + "." + vendor_name + ".json"
@@ -248,7 +249,7 @@ def process_all_images():
     # Render HTML file with all results.
     output_html = render_from_template(
         '.',
-        os.path.join(settings('static_dir'), 'template.html'),
+        posixpath.join(settings('static_dir'), 'template.html'),
         image_results=image_results,
         vendor_stats=vendor_stats,
         process_date=datetime.datetime.today()
@@ -257,7 +258,7 @@ def process_all_images():
     # Write HTML output.
     output_html_filepath = os.path.join(settings('output_dir'), 'output.html')
     with open(output_html_filepath, 'w') as output_html_file:
-        output_html_file.write(output_html.encode('utf-8'))
+        output_html_file.write(output_html)
 
 
 if __name__ == "__main__":
