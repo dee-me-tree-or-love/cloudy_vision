@@ -84,7 +84,7 @@
               <td class="result_values">
                   {% for result in feature_results %}
                   {% set score = result[1] %}
-                  <span class="result" style="opacity: {{ score if score>0 else 50.0 }}">
+                  <span class="result" style="opacity: {{ score if score > 0 else 50.0 }}">
                       {{ result[0] }}
                       {% if score is not none %}
                       <span class="score">({{ ("%.2f" % score).lstrip('0') if score else 'n/a'}})</span>

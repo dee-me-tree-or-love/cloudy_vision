@@ -14,6 +14,10 @@ import vendors.text.microsoft
 import vendors.labels.rekognition
 import vendors.text.rekognition
 
+import vendors.labels.google
+import vendors.text.google
+
+
 SETTINGS = None
 def settings(name):
     """Fetch a settings parameter."""
@@ -30,8 +34,7 @@ def settings(name):
             'static_dir' : 'static',
             'output_image_height' : 200,
             'vendors' : {
-                # TODO: get an API KEY for google
-                # 'google' : vendors.google,
+                'google' : vendors.text.google,
                 'msft' : vendors.text.microsoft,
                 # 'clarifai' : vendors.clarifai_,
                 # 'ibm' : vendors.ibm,

@@ -22,24 +22,15 @@ def call_vision_api(image_filename, api_keys):
           },
           "features": [
             {
-              "type": "LABEL_DETECTION",
-              "maxResults": 10
-            },
-            {
-              "type": "FACE_DETECTION",
-              "maxResults": 10
-            },
-            {
-              "type": "LANDMARK_DETECTION",
-              "maxResults": 10
-            },
-            {
               "type": "LOGO_DETECTION",
               "maxResults": 10
             },
             {
               "type": "SAFE_SEARCH_DETECTION",
               "maxResults": 10
+            },
+            {
+              "type": "TEXT_DETECTION"
             },
           ]
         }
@@ -60,11 +51,11 @@ def get_standardized_result(api_result):
 
     api_result = api_result['responses'][0]
 
-    if 'labelAnnotations' in api_result:
-        for tag in api_result['labelAnnotations']:
-            output['tags'].append((tag['description'], tag['score']))
-    else:
-        output['tags'].append(('none found', None))
+    # print(json.dumps(api_result))
+
+    if 'textAnnotations' in api_result:
+        for tag in api_result['textAnnotations']:
+            output['tags'].append((tag['description'], 0.0))
 
     if 'logoAnnotations' in api_result:
         output['logo_tags'] = []
